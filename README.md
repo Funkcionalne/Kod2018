@@ -1,2 +1,2 @@
-# Cvicenia
+# Cvičenia
 Cvičenia k Funkcionálku
