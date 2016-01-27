@@ -1,0 +1,2 @@
+# Cvicenia
+Cvicenia k Funckionalku
