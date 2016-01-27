@@ -1,2 +1,2 @@
 # Cvicenia
-Cvicenia k Funckionalku
+Cvičenia k Funkcionálku
