@@ -1,2 +1,2 @@
 # Cvičenia
-Cvičenia k Funkcionálku
+Cvičenia k Funkcionálku, vedie Michal Winczer
