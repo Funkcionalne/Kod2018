@@ -1,0 +1,1 @@
+tu budu raz riesenia domacich uloh zostavy DU 01

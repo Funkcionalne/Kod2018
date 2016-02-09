@@ -1,0 +1,1 @@
+tu bude raz priprava na cvicenie a dva subory z cviceni skupin 4k a 6k
