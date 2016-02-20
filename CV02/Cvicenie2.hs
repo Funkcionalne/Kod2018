@@ -1,3 +1,5 @@
+module Cvicenie2 where
+
 -- =========================================== STATISTIKY
 -- zapnite si statistiku direktivou
 -- :set +s
