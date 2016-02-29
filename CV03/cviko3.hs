@@ -33,14 +33,44 @@ mytakewhile p = foldr f []
 -- where f x = ... doplnte
 --     f x = if p x then [x] else []
 
+------------------------------------
+-- foldl1 f [a1,...,an] = (... (f (f a1 a2) a3 ... an)
+-- foldl1 f [a1] = a1
+-- foldl1 f [] = undefined
+-- priklad
+-- foldl1 (/) [64,4,2,8] = 1
 
----------------------- definujte foldl1 pomocou foldr1
+-- definujte foldl1 pomocou foldl1
+myfoldl1 f (x:xs)  = foldl f x xs
+
 
 -- foldr1 f [a1,...,an] = (f a1 (f a2 ... (f a_n-1 an)))
 -- foldr1 f [a1] = a1
 -- foldr1 f [] = undefined
 -- priklad
 -- foldr1 (/) [8,12,24,4] = 4.0
+
+-- definujte foldr pomocou foldr1
+myfoldr f z xs  = foldr1 f (xs ++[z])
+
+
+-- scanl f z [a1, ..., an] = [z, f z a1, f (f z a1) a2, ...]
+-- scanl (\x -> \y -> 2*x + y) 4 [1,2,3] =  [4,9,20,43] 
+
+-- definujte scanl pomocou foldl
+myscanl f z xs = foldl (\acc -> \x -> acc ++ [(f (last acc) x)]) [z] xs
+
+-- definujte scanl pomocou foldl efektivnejsie (napr. pomocou reverse)
+myscanl' f z xs = reverse $ foldl (\acc -> \x -> (f (head acc) x):acc) [z] xs
+
+-- definujte foldl pomocou scanl
+myfoldl' f z xs = last $ scanl f z xs
+
+-- definujte scanr pomocou foldr
+myscanr f z xs = foldr (\x -> \rek -> (f (head rek) x):rek) [z] xs
+
+-- definujte foldr pomocou scanr
+myfoldr' f z xs = head $ scanr f z xs
 
 
 ------------------------- definujte foldr pomocou foldr1
@@ -79,3 +109,4 @@ myscanr f a [] = [a]
 myscanr f a (x:xs) = f x a0 : zvysok
   where
      zvysok@(a0:_) = myscanr f a xs
+     
