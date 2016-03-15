@@ -20,7 +20,7 @@ ktorá zo zoznamu xs odstráni všetky duplikáty.
 V riešení nemôžete použiť Data.List, všetky funkcie si musíte urobiť sami.
 Príklad:
 zmazDuplikaty [1,2,1,2,1,3,1,2,3] vráti [1,2,3]
-
+-}
 --hruba sila
 zmazDuplikaty :: Ord a => [a] -> [a]
 zmazDuplikaty = vyhodRovnake . utried
@@ -34,6 +34,7 @@ vyhodRovnake (x1:x2:xs) =
   if x1 == x2 then vyhodRovnake (x2:xs) else x1:(vyhodRovnake (x2:xs))
 vyhodRovnake x = x
 
+{-
 -- hruba sila inak
 zmazDuplikaty :: [Int] -> [Int]
 zmazDuplikaty [] = []
@@ -81,8 +82,7 @@ v1 = ICon 10
 v2 = Var "x"
 v3 = Add v1 v2
 v4 = Sub v3 v3
-v5 = Add v3 v4
---v5 = Mul v3 v4
+v5 = Mul v3 v4
 v6 = Div v4 v5
 
 -- riesenie 2
