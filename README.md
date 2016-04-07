@@ -12,3 +12,5 @@ Tretie cvičenia [sú online](CV03/).
 Piate cvičenia [tu](CV05/).
 
 Pridané domáce úlohy 2 a 3 + časť domácej úlohy 4.
+
+Pridaná časť domácej úlohy 5 (iba testy).
