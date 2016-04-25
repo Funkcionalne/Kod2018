@@ -26,7 +26,16 @@ najdlhsie' xs = fst $ jedenPrechod xs (-1)
             
 -- 3body
 -- vrati najkratsi neprazdny retazec, ktory sa nenachadza v zozname retazcov
-alls = []:[ x:a | a<-alls,x<-['a'..'z']]
+alls::[String]
+--alls = "":[ x:a | a<-alls,x<-['a'..'z']]
+--alls = [ x:a | a<-alls,x<-['a'..'z']]
+alls = "":[ x:a | x<-['a'..'z'],a<-alls]
+
+var :: Int -> [String]
+var 0 = [""]
+var k = [ x:a | x<-['a'..'z'],a<-var (k-1)]
+
+
 najkratsi :: [String] -> String
 najkratsi xs = head (filter (`notElem` xs) (tail alls))
 
