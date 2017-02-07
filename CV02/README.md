@@ -1,1 +1,0 @@
-Cvičenie 2
