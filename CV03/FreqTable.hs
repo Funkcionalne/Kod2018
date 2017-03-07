@@ -22,7 +22,8 @@ mostFrequent :: Int -> String -> String
 mostFrequent n ws = tail $ concat $  map (\(c,w)->" " ++ w) $ reverse $ take n $ reverse $ sort $ chunkLengths $ chunks $ sort $ (splitWords whiteSpace) $ map toLower ws
 
 freqTable :: String -> FreqTable
-freqTable ws = sort $ chunkLengths $ chunks $ sort $ splitChars $ map toLower ws
+--freqTable ws = sort $ chunkLengths $ chunks $ sort $ splitChars $ map toLower ws
+freqTable ws = sort $ chunkLengths $ chunks $ sort $ splitChars $ ws
 
 -- funckionalna verzia 
 mostFrequent' n = tail . concat .  map (\(c,w)->" " ++ w) . reverse . take n . reverse . sort . chunkLengths . chunks . sort . (splitWords whiteSpace) . map toLower
