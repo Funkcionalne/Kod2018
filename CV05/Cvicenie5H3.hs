@@ -3,8 +3,13 @@ module Cvicenie5H3 where
 import Data.List
 import Terms
 
+-- LAMBDA Var LExp | ID Var | APP LExp LExp
+{-
 instance Show LExp where
-  show  = undefined
+  show (LAMBDA x1 ex) = "(\\" ++ x1 ++ " -> " ++ (show ex) ++ " )"
+  show (ID x1) = x1
+  show (APP ex1 ex2) = "( " ++ (show ex1) ++ " " ++ (show ex2) ++" )"
+-}  
   
 ione =    (APP isucc izero)
 itwo =    (APP isucc (APP isucc izero))
@@ -20,8 +25,36 @@ isucc = (LAMBDA "n"
 -- najst vsetky podtermy termu
 -- priamociaro
 podtermy :: LExp -> [LExp]
-podtermy = undefined
+podtermy x@(LAMBDA x1 ex) = [x]  ++ (podtermy ex)
+podtermy x@(ID x1) = [x]
+podtermy x@(APP ex1 ex2) = [x]  ++ (podtermy ex1) ++ (podtermy ex2)
 
+podtermy' x = nub $ podtermy x
+
+foldlExp:: (String -> b) -> (b->b->b) -> (String -> b -> b) -> LExp -> b
+foldlExp var app lambda (ID x1) = var x1
+foldlExp var app lambda (APP ex1 ex2) = app (foldlExp var app lambda ex1) (foldlExp var app lambda ex2)
+foldlExp var app lambda (LAMBDA x1 ex) = lambda x1 (foldlExp var app lambda ex)
+
+instance Show LExp where
+	show ex = foldlExp id (\x -> \y -> "(" ++ x ++ " " ++ y ++ ")") 
+					    (\var -> \y -> "(\\" ++ var ++ " ->" ++ y ++ ")")
+						ex
+{-						
+podtermy'' :: LExp -> [LExp]
+podtermy'' ex = foldlExp (\x -> [ID x]) (\x -> \y -> x ++ y ++ )
+-}
+
+subst :: LExp -> String -> String -> LExp
+subst (ID x1) var1 var2 = if x1 == var1 then (ID var2) else (ID x1)
+subst (APP ex1 ex2) var1 var2 = (APP (subst ex1 var1 var2) (subst ex2 var1 var2))
+subst (LAMBDA x ex) var1 var2 = if x == var1 then (LAMBDA x ex) else pom
+									where pom = if (freeVar ex var1) then (LAMBDA (x++x) (subst (subst ex x (x++x)) var1 var2)) else (LAMBDA x (subst ex var1 var2))
+
+freeVar :: LExp -> String -> Bool
+freeVar (ID x) var = x == var
+freeVar (APP ex1 ex2) var = (freeVar ex1 var) || (freeVar ex2 var)
+freeVar (LAMBDA x ex) var = if x == var then False else freeVar ex var
 {--
 podtermy (LAMBDA "x" (APP (ID "x") (ID "x")))
 [\x->(x x),(x x),x]
@@ -79,5 +112,3 @@ e1 = [
   ,
   alpha (LAMBDA "x" (APP (ID "x") (ID "x"))) (LAMBDA "y" (APP (ID "z") (ID "y")))
   ]
-
-
