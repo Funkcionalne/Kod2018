@@ -33,7 +33,7 @@ nahradMaxTree t = nahrad (maxTree t) t
         maxTree (Branch x t1 t2) = max x (max (maxTree t1) (maxTree t2))
                 
 nahradMaxTree' :: (Ord t) => Tree t -> Tree t
-nahradMaxTree'  (Branch k t1 t2) = fst $ jedenPrechod  k t1
+nahradMaxTree'  t@(Branch k t1 t2) = fst $ jedenPrechod  k t
   where jedenPrechod m Empty = (Empty, m)
         jedenPrechod m (Branch k t1 t2) = ((Branch m'' t1' t2'), m'')
           where

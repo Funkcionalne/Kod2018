@@ -13,6 +13,7 @@ nahradMax (x:xs) m = (m' : xs', m')
     (xs', m') = nahradMax xs (if x > m then x else m)
     
     
+
     
 -- zvysne su uz len rozne sposoby preliezania zoznamom
 nahrad' xs = prepis xs 
@@ -50,7 +51,7 @@ percenta' t = t'
   where (s, t') = percenta1' s t
   
 percenta1' :: (Fractional a) => Integer -> Tree Integer -> (Integer, Tree a)
-percenta1' s Empty = (0, Empty)
+percenta1' _ Empty = (0, Empty)
 percenta1' s (Branch v t1 t2) = 
     (v + s1 + s2, Branch (fromInteger v / fromInteger s) t1' t2')
   where
