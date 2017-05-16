@@ -2,8 +2,10 @@
 instance Functor Maybe where
   -- fmap :: (a -> b) -> Maybe a -> Maybe b
   fmap _ Nothing = Nothing
-  fmap g (Just x) = Just (g x)
+  fmap f (Just x) = Just (f x)
 -}
+
+-- Functors abstract the idea of mapping a function over each element of a structure
 
 -- vyhodnotte
 e1 = fmap (+1) Nothing
@@ -26,4 +28,3 @@ inc = fmap (+1)
 e6 = inc (Just 1)
 e7 = inc [1,2,3,4,5]
 e8 = inc (Node (Leaf 1) (Leaf 2))
--- Functors abstract the idea of mapping a function over each element of a structure
