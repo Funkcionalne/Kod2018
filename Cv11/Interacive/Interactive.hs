@@ -26,6 +26,7 @@ read1_1 = do  x <- getChar
              
 -- toto samozrejme existuje a vola sa to getLine
 readLine  :: IO String
+--readLine  :: IO [Char]
 readLine  = do  x <- getChar
                 if x == '\n' then
                   return []
@@ -37,7 +38,7 @@ readLine  = do  x <- getChar
 zlep    :: IO String
 zlep    = do  str <- getLine
               if length str == 0 then
-                return ""
+                return []
               else
                 do  zlepenec <- zlep
                     return (str++zlepenec)
@@ -63,7 +64,7 @@ hadaj from to =   if from > to then
                   else if from == to then
                     putStrLn ("je to cislo " ++ (show from))
                   else
-                    do  response <- putStrLn ("je vacsie ako " ++  (show ((from + to) `div` 2)) ++ " [y/n]")
+                    do  putStrLn ("je vacsie ako " ++  (show ((from + to) `div` 2)) ++ " [y/n]")
                         ch <- getLine
                         if ch == "y" then   
                             hadaj (((from + to) `div` 2) + 1) to

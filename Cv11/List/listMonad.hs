@@ -43,3 +43,39 @@ guardedComprehension xs ys = do { x<-xs; y<-ys; guard (x*y == 8); return (x,y) }
 guardedComprehension [1..10] [1..10]
 [(1,8),(2,4),(4,2),(8,1)]
 -}
+
+pythagoras =   [(x, y, z) | z <- [1..],
+                            x <- [1..z],
+                            y <- [x..z],
+                            x * x + y * y == z * z]
+
+{- zle riesenie
+pythagoras' =   do z <- [1..]
+                   x <- [1..z]
+                   y <- [x..z]
+                   if x * x + y * y == z * z then return (x,y,z) else return ()
+-}                                    
+                            
+pythagoras'' =   do z <- [1..]
+                    x <- [1..z]
+                    y <- [x..z]
+                    if x * x + y * y == z * z then return "hogo-fogo" else []
+                    return (x,y,z)
+
+pythagoras''' =   do  z <- [1..]
+                      x <- [1..z]
+                      y <- [x..z]
+                      if x * x + y * y == z * z then ["hogo-fogo"] else []
+                      return (x,y,z)
+
+pythagoras'''' =  do  z <- [1..]
+                      x <- [1..z]
+                      y <- [x..z]
+                      if x * x + y * y == z * z then return () else []
+                      return (x,y,z)
+
+pythagoras''''' =  do  z <- [1..]
+                       x <- [1..z]
+                       y <- [x..z]
+                       guard (x * x + y * y == z * z)
+                       return (x,y,z)

@@ -10,7 +10,20 @@ instance Show Sheep where
 --    (Just x) >>= f = f x
 --    return         = Just
 
+
+
+
+
+
+
+
 maternalGrandfather :: Sheep -> Maybe Sheep
+
+maternalGrandfather' o = if mother o == Nothing then
+                            Nothing
+                         else 
+                            father (mother o)
+
 maternalGrandfather s = do  m <- mother s
                             father m
 
