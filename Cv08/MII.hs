@@ -1,5 +1,4 @@
-module Cvicenie08  where
-
+module Cvicenie08 where
 import Prelude hiding ((<*>), (<|>), (*>), (<*), sequence)
 import Data.Char
 
@@ -41,21 +40,23 @@ satisfy :: (s -> Bool) -> Parser s s
 satisfy p [] = []
 satisfy p (x:xs) = [ (xs, x) | p x ]
 
-------------------------------------------------------------- Cvicenia z prednasky
---symbol inak, cv. 1.
-symbol'' a = satisfy (\x->x==a)
-symbol''' a = satisfy (==a)
+-- symbol inak, pomocou satisfy, cv. 1.
+-- Keďže satisfy je zovšeobecnením symbol, definujte symbol ako inštanciu satisfy.
+
+symbol'' :: Eq s => s -> Parser s s
+symbol'' a = satisfy (==a)
 
 --cv. 2, a 3.
 digit10 :: Parser Char Char
-digit10 = satisfy isDigit
+digit10 = satisfy (isDigit)
 
+-- Definujte analyzátor hexa::Parser Char Char, ktorý analyzuje jednu šesnástkovú cifru, t.j. (0, 1, …, F)
 hexa :: Parser Char Char
-hexa = satisfy (\x->elem x "0123456789ABCDEF")
+hexa = undefined
 
 hexa' = satisfy (\x-> isDigit x || elem x ['A'..'F'])
 hexa'' =satisfy isHexDigit
--------------------------------------------------
+
 epsilon :: Parser s () -- () je ako typ void
 epsilon xs = [ ( xs, () ) ] -- () hodnota typu (), ako null
 
@@ -76,12 +77,9 @@ infixr 4 <|>
 (<|>) :: Parser s a -> Parser s a -> Parser s a
 (p1 <|> p2) xs = p1 xs ++ p2 xs
 
--- cv.4
--- lebo zlozitost (++) je umerna dlzke prveho argumentu
-
 -- cv.5
-yes = token "YES"
-no = token "NO"
+yes = token "yes"
+no = token "no"
 yesno = yes <|> no
 
 -- toto asi nie, kvoli typom
@@ -96,11 +94,9 @@ just :: Parser s a -> Parser s a
 just p = filter (null.fst) . p
 
 ------- 
--- Cv. 5'
-justYESNO = just yesno
 
 --cv.6
-just' p xs = [x | x <- p xs, null $ fst x]
+just' p xs = [(ys, v) | (ys, v) <- p xs, ys == []]
 
 infix 5 <@ -- infixová notácia pre aplikátor
 (<@) :: Parser s a -> (a->b) -> Parser s b
@@ -124,11 +120,7 @@ p <:*> q = p <*> q <@ list
 -- cv 7.
 infixr 6 <:**>
 (<:**>) :: Parser s a -> Parser s [a] -> Parser s [a]
--- p <:**> q = p <*> q  <@ (\x->(fst x):(snd x))
--- alternativa, kto pozna uncurry
-p <:**> q = p <*> q <@ uncurry (:)
--- alebo aj takto
--- p <:**> q xs = [(ys, z:zs) | (xs2,z) <- p xs, (ys, zs) <- q xs2]
+p <:**> q = p <*> q <@ (uncurry (:))
 
 single :: a -> [a]
 single x = [x]
@@ -139,12 +131,10 @@ option :: Parser s a -> Parser s [a]
 option p = p <@ single <|> succeed []
 
 -- {p}^*
--- manyp -> epsilon | P manyP
 many :: Parser s a -> Parser s [a]
 many p = p <:*> (many p) <|> succeed []
 
 -- {p}^+
--- many1p -> P manyP
 many1 :: Parser s a -> Parser s [a]
 many1 p = p <:*> many p
 
@@ -152,63 +142,46 @@ sequence :: [Parser s a] -> Parser s [a]
 sequence = foldr (<:*>) (succeed [])
 
 --cv 8.
+sequence' :: [Parser s a] -> Parser s [a]
 sequence' [] = succeed []
-sequence' (x:xs) = x <:*> (sequence' xs)
+sequence' (p:ps) = p <:*> (sequence' ps)
 
---cv 8', v subore s kodom z prednasky
+--cv 8', v subore s kodom z prednasky\
 token' :: Eq s => [s] -> Parser s [s]
-token' str = sequence (map symbol str)
-
--- rafinovanejsie
-token'' :: Eq s => [s] -> Parser s [s]
-token'' = sequence' . map symbol
+token' = sequence' . map symbol
 
 --cv 9.
-mobileNumber  :: Parser Char [Char]
-mobileNumber = just $ sequence' ([symbol '0', symbol '9'] ++ (replicate 8 digit10))
 
-psc  :: Parser Char [Char]
-psc = just $ sequence' ((replicate 3 digit10) ++ [symbol ' '] ++ (replicate 2 digit10))
+mobOk = sequence ([ symbol '0', symbol '9'] ++ (replicate 8 digit10))
 
 choice :: [Parser s a] -> Parser s a
 choice = foldr (<|>) failp
 
+psc  :: Parser Char [Char]
+psc = undefined
+
 -- cv. 10
 year  :: Parser Char [Char]
-year = sequence' (replicate 4 digit10)
+year = undefined
 
-month  :: Parser Char (Char,Char)
-month = symbol '0' <*> digit10
-        <|>
-        symbol '1' <*> (symbol '0' <|> symbol '1' <|> symbol '2')
+--month  :: Parser Char (Char,Char)
+month = sequence ([ symbol '0', digit10]) 
+    <|> sequence ([ symbol '1', satisfy (\a -> elem a "012")])
         
 month'  :: Parser Char [Char]
-month' = sequence' [ symbol '0', digit10]
-         <|>
-         sequence' [symbol '1', (symbol '0' <|> symbol '1' <|> symbol '2') ]        
+month' = undefined
 
 day  :: Parser Char (Char,Char)
-day = symbol '0' <*> digit10
-        <|>
-        symbol '1' <*> digit10
-        <|>
-        symbol '2' <*> digit10
-        <|>
-        symbol '3' <*> (symbol '0' <|> symbol '1')
+day = undefined
         
 day'  :: Parser Char [Char]
-day' = sequence' [ (symbol '0' <|> symbol '1' <|> symbol '2'), digit10]
-        <|>
-         sequence' [symbol '3', (symbol '0' <|> symbol '1') ]
+day' = undefined
          
 day''  :: Parser Char [Char]
-day'' = sequence' [ choice [symbol '0' , symbol '1' , symbol '2' ], digit10]
-        <|>
-         sequence' [symbol '3', (symbol '0' <|> symbol '1') ]         
+day'' = undefined
          
 --------------------
 -- Determinsm
-
 
 determ :: Parser a b -> Parser a b
 determ p xs  |  null r     =  []
@@ -287,18 +260,18 @@ float        =  fixed
                 power e | e<0       = 1.0 / power (-e)
                         | otherwise = fromInteger(10^e)
          
+------------------------------------------------------------------------         
          
-         
-
+-- V -> a V a | ε
 parserV :: Parser Char [Char]
-parserV = ( symbol 'a' *> parserV <* symbol 'a' ) <@ (\x -> ('a':(x ++ "a")))
-          <|>
-          succeed []
+parserV = (symbol 'a' <*> parserV <*> symbol 'a') <@ (\(x,(y,z)) -> x:(y++[z]))
+         <|> succeed []
                           
 justparserV :: Parser Char [Char]
 justparserV = just $ parserV
                                           
 --------------------
+-- S -> S S | a
 {-- zle riesenie}               
 parserS :: Parser Char [Char]
 parserS = ( parserS <*> parserS ) <@ (\(x,y) -> (x++y))
@@ -307,27 +280,15 @@ parserS = ( parserS <*> parserS ) <@ (\(x,y) -> (x++y))
 ---}
 
 parserS :: Parser Char [Char]
-parserS = ( symbol 'a' <*> parserS ) <@ (\(x,y) -> (x : y))
-          <|>
-          succeed []
-
-          
+parserS = undefined
+        
 justparserS :: Parser Char [Char]
 justparserS = just $ parserS
 
 --------------------
-                
+-- R -> a R a | b R b | c R c | ε
 parserR :: Parser Char [Char]
-parserR = (
-            symbol 'a' <*> parserR <*> symbol 'a'
-            <|>
-            symbol 'b' <*> parserR <*> symbol 'b'
-            <|>
-            symbol 'c' <*> parserR <*> symbol 'c'
-        ) <@ (\(x, (y,z)) -> (x:(y ++ [z])))
-          <|>
-          succeed []
+parserR = undefined
                           
 justparserR :: Parser Char [Char]
 justparserR = just $ parserR
-                          
