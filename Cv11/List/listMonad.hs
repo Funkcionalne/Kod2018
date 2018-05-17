@@ -37,7 +37,8 @@ ain> guardedMonadComprehension [1..10] [1..10]
 -}
 
 guardedComprehension :: [Int] -> [Int] -> [(Int,Int)]
-guardedComprehension xs ys = do { x<-xs; y<-ys; guard (x*y == 8); return (x,y) }
+guardedComprehension xs ys = do { 
+          x<-xs; y<-ys; guard (x*y == 8); return (x,y) }
 
 {-
 guardedComprehension [1..10] [1..10]
@@ -79,3 +80,56 @@ pythagoras''''' =  do  z <- [1..]
                        y <- [x..z]
                        guard (x * x + y * y == z * z)
                        return (x,y,z)
+
+spriatelene = do  z <- [1..]
+                  guard(sd z /= z)
+                  guard(sd(sd z) == z)
+                  return (z, sd z)
+
+sd x = sum [ d | d <-[1..x-1], x `mod` d == 0]
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+                       
+spriatelene'   = do   z<-[1..]
+                      guard( (sucdel z) /= z)
+                      guard ( sucdel (sucdel z) == z)
+                      return (z, (sucdel z))
+                       
+                    
+sucdel x = sum [i | i <- [1.. (x-1)], x `mod` i == 0 ]    
+
+{-
+Prvé dve priate¾ské èísla sú 220 a 284.
+
+Vlastné delitele 220 sú: 1, 2, 4, 5,10, 11, 20, 22, 44, 55, 110 ich súèet je 284.
+
+Vlastné delitele 284 sú 1, 2, 4, 71, 142 a ich súèet je 220.
+-}                
